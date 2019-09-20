@@ -1,27 +1,34 @@
+"""
+Code authored by zysymu~
+Made with love for Metodos Computacionais da Fisica B.
+It contains different Runge-Kutta methods, and also a practical way to plot the results using different
+step sizes in order to make graphical comparisons.
+"""
 import matplotlib.pyplot as plt
 from math import *
 import numpy as np
 
 plt.style.use("ggplot")
 
-#variaveis
+#defining variables
 global x_in, tau, t, tf
-steps = [0.1, 0.5]
+steps = [0.1, 0.5] #can contain different step sizes in order to make an automatic comparison
 tf = 6
 x_in = 10.
 tau = 2.
 
-#analitica
-ta = np.arange(0, tf, 0.0001)
+#analytical function (it`s going to be used in order to make comparisons with the algorithm)
+#also, it's a simple radioactive decay equation
+ta = np.linspace(0, tf)
 xa = x_in * np.exp(-ta/tau)
 
-#funcoes
-def plot(step, plot_x, plot_y, met): #plot_x e plot_y sao listas
+
+#general plotting function
+def plot(step, plot_x, plot_y, met): #plot_x and plot_y are lists containing sublists
     for i in range(len(step)):
         plt.plot(plot_x[i], plot_y[i], label=str(step[i]) +" "+ met)
-    
+ 
 
-    
 def time(dt, t):
     tind = []
     while (t<=tf):
@@ -30,7 +37,7 @@ def time(dt, t):
     
     return tind
 
-
+#runge-kutta 2 (rk2) and runge-kutta 4 (rk4) algorithms:
 def rk2_heun(dt, x):
     ind = []
     t=0
@@ -106,7 +113,7 @@ def rk4_classic(dt, x):
 
 
 
-#aplicacao
+#applying
 #rk4 classic
 rk4_plot = [rk4_classic(dt, x_in) for dt in steps]
     
@@ -117,16 +124,12 @@ rk4_3o8 = [rk4_3o8(dt, x_in) for dt in steps]
 t_plot = [time(dt, t=0) for dt in steps]    
 midpoint_plot = [midpoint(dt, x_in) for dt in steps]
 
-plt.plot(ta, xa, label="analitica", c="black")
-plot(steps, t_plot, midpoint_plot, met="pm")
+plt.plot(ta, xa, label="analytic", c="black")
+plot(steps, t_plot, midpoint_plot, met="midpoint")
 plot(steps, t_plot, rk4_plot, met="rk4")
 
-plt.xlabel("Tempo")
-plt.ylabel("Num. de atomos")
+plt.xlabel("time")
+plt.ylabel("num of atoms")
 plt.legend()
 plt.show()
 
-
-for el in range(len(steps)):
-    print("RK4 3/8 para o passo " + str(steps[el]) + ":")
-    print(rk4_3o8[el], "\n")
