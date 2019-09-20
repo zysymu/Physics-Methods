@@ -1,3 +1,7 @@
+"""
+Code authored by zysymu~
+Made with love for Metodos Computacionais da Fisica B.
+"""
 import matplotlib.pyplot as plt
 
 global tf, x_in
